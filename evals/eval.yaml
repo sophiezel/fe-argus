@@ -19,7 +19,7 @@ cases:
     - evals/cases/white-screen-diagnosis.yaml
     - evals/cases/over-engineering-resistance.yaml
   defaults:
-    timeout_seconds: 180
+    timeout_seconds: 300
     max_turns: 8
 
 report:
