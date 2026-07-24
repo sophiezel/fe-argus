@@ -1,6 +1,6 @@
-# Frontend Architect Expert
+# Argus (fe-argus)
 
-Glossary for the frontend-architect-expert skill: coding quality gates and scenario playbooks that steer AI-assisted implementation.
+Glossary for the **fe-argus** skill: coding quality gates and scenario playbooks that steer AI-assisted frontend implementation.
 
 ## Language
 
