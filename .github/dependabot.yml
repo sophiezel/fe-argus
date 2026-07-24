@@ -1,0 +1,28 @@
+version: 2
+
+updates:
+  # GitHub Actions 自动升级（避免 actions/checkout@v4 Node 20 deprecation 这类问题）
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+      timezone: Asia/Shanghai
+    open-pull-requests-limit: 5
+    labels:
+      - dependencies
+      - ci
+    commit-message:
+      prefix: ci
+      include: scope
+    pull-request-branch-name:
+      separator: "-"
+
+  # 未来如加 package.json，启用 npm 监控
+  # - package-ecosystem: npm
+  #   directory: /
+  #   schedule:
+  #     interval: weekly
+  #   open-pull-requests-limit: 5
+  #   labels:
+  #     - dependencies

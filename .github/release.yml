@@ -1,0 +1,60 @@
+changelog:
+  categories:
+    - title: 🚀 Features
+      labels:
+        - feat
+        - feature
+        - enhancement
+      exclude:
+        labels:
+          - dependencies
+
+    - title: 🧪 Evals & Tests
+      labels:
+        - test
+        - evals
+
+    - title: 📚 Documentation
+      labels:
+        - docs
+
+    - title: 🔧 CI / Maintenance
+      labels:
+        - ci
+        - chore
+        - refactor
+      exclude:
+        labels:
+          - dependencies
+
+    - title: ⬆️ Dependencies
+      labels:
+        - dependencies
+
+    - title: 🐛 Bug Fixes
+      labels:
+        - fix
+        - bugfix
+        - bug
+
+    - title: 🔒 Security
+      labels:
+        - security
+
+    - title: Other
+      exclude:
+        labels:
+          - feat
+          - feature
+          - enhancement
+          - test
+          - evals
+          - docs
+          - ci
+          - chore
+          - refactor
+          - dependencies
+          - fix
+          - bugfix
+          - bug
+          - security

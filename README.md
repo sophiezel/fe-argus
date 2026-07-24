@@ -320,6 +320,20 @@ PR welcome。请：
 2. 加对应 eval case（`evals/cases/`）
 3. 跑 `skill-up run evals/eval.yaml` 确认不回归
 4. 提 PR，描述场景 + 评测结果
+5. PR 用 [Keep a Changelog](https://keepachangelog.com/) 风格的 label（`feat` / `fix` / `docs` / `ci` / `test` / `refactor`），便于自动归类到 [CHANGELOG](CHANGELOG.md) 和 Release notes
+
+## Changelog
+
+详见 [CHANGELOG.md](CHANGELOG.md)。每个 release 的 notes 由 `.github/release.yml` 按 PR label 自动分类生成。
+
+发新版本：
+
+```bash
+# 1. 更新 CHANGELOG.md 的 [Unreleased] -> [vX.Y.Z]
+# 2. commit + push main
+# 3. 打 tag + release（自动生成 notes）
+gh release create vX.Y.Z --generate-notes
+```
 
 ## License
 
