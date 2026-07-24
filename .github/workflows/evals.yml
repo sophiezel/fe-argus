@@ -1,0 +1,80 @@
+name: evals
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'SKILL.md'
+      - 'AGENTS.md'
+      - 'references/**'
+      - 'evals/**'
+      - '.github/workflows/evals.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'SKILL.md'
+      - 'AGENTS.md'
+      - 'references/**'
+      - 'evals/**'
+      - '.github/workflows/evals.yml'
+  workflow_dispatch: {}
+
+# 防止同分支并发跑爆 API 配额
+concurrency:
+  group: evals-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  skill-up:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      # 把 secret 存在性转成 env，避免 if 里直接判 secrets（GitHub 限制）
+      HAS_TOKEN: ${{ secrets.ANTHROPIC_AUTH_TOKEN != '' }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install skill-up
+        run: |
+          curl -fsSL https://raw.githubusercontent.com/alibaba/skill-up/main/install.sh | bash
+          echo "$HOME/.local/bin" >> $GITHUB_PATH
+
+      - name: Show skill-up version
+        run: skill-up --version
+
+      - name: Validate eval.yaml
+        run: skill-up validate evals/eval.yaml
+
+      - name: List cases
+        run: skill-up list-cases evals/eval.yaml
+
+      - name: Run evals
+        if: env.HAS_TOKEN == 'true'
+        env:
+          ANTHROPIC_AUTH_TOKEN: ${{ secrets.ANTHROPIC_AUTH_TOKEN }}
+          ANTHROPIC_BASE_URL: ${{ secrets.ANTHROPIC_BASE_URL }}
+          ANTHROPIC_DEFAULT_SONNET_MODEL: ${{ secrets.ANTHROPIC_MODEL }}
+          ANTHROPIC_DEFAULT_OPUS_MODEL: ${{ secrets.ANTHROPIC_MODEL }}
+          ANTHROPIC_DEFAULT_HAIKU_MODEL: ${{ secrets.ANTHROPIC_MODEL }}
+        run: skill-up run evals/eval.yaml
+
+      - name: Upload eval report
+        if: always() && env.HAS_TOKEN == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: eval-report-${{ github.run_id }}
+          path: fe-argus-workspace/iteration-*/
+          if-no-files-found: warn
+          retention-days: 14
+
+      - name: Skip evals (no token)
+        if: env.HAS_TOKEN != 'true'
+        run: |
+          echo "::notice::Eval run skipped — ANTHROPIC_AUTH_TOKEN secret not set."
+          echo "To enable: repo Settings → Secrets and variables → Actions → add ANTHROPIC_AUTH_TOKEN"
+          echo "(Optional) add ANTHROPIC_BASE_URL and ANTHROPIC_MODEL if using a proxy."

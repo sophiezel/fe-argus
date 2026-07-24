@@ -1,5 +1,9 @@
 # fe-argus (Argus)
 
+[![evals](https://github.com/sophiezel/fe-argus/actions/workflows/evals.yml/badge.svg)](https://github.com/sophiezel/fe-argus/actions/workflows/evals.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![Release](https://img.shields.io/github/v/release/sophiezel/fe-argus)](https://github.com/sophiezel/fe-argus/releases)
+
 > 前端架构与编码质量门 — 一个 skill，全 agent 通用（Claude Code / Cursor / Continue / Windsurf / PI / Aider）。
 >
 > `fe` = frontend 域；`Argus` = 百眼——写前质量门 / 场景命中 / 陷阱扫描。
@@ -31,10 +35,17 @@ curl -fsSL https://raw.githubusercontent.com/sophiezel/fe-argus/main/install.sh 
 # 方式 3：SSH 仓库地址（已配 SSH key 时）
 FE_ARGUS_REPO=git@github.com:sophiezel/fe-argus.git \
   curl -fsSL https://raw.githubusercontent.com/sophiezel/fe-argus/main/install.sh | bash
+
+# 方式 4：锁定版本（生产推荐，避免 main 漂移）
+FE_ARGUS_BRANCH=v1.0.0 \
+  curl -fsSL https://raw.githubusercontent.com/sophiezel/fe-argus/v1.0.0/install.sh | bash
 ```
 
 > **HTTPS vs SSH**：install.sh 内部 `git clone` 默认用 HTTPS（公开仓库免 token）；
 > 想用 SSH 时设 `FE_ARGUS_REPO=git@...` 环境变量覆盖。`curl | bash` 下载脚本本身必须用 HTTPS。
+>
+> **锁定版本**：生产环境用 `FE_ARGUS_BRANCH=v1.0.0` 锁定 release tag，避免 main 分支规则漂移。
+> 见 [Releases](https://github.com/sophiezel/fe-argus/releases) 查看所有版本。
 
 安装脚本会：
 1. 检查 `bash / python3 / git` 依赖
@@ -225,6 +236,37 @@ open fe-argus-workspace/iteration-N/report.html
 | `search-ime-routing` | 场景 Q IME + debounce + Abort 三件套 |
 | `white-screen-diagnosis` | 场景 A 分层诊断 + pitfall 命中 |
 | `over-engineering-resistance` | NEVER #10 反推 280 种组合 / 279 不被测试 |
+
+### CI 自动回归
+
+PR / push 到 main 时自动跑 evals（`.github/workflows/evals.yml`）：
+
+- 改 `SKILL.md` / `references/` / `evals/` 触发
+- 跑 `skill-up validate` + `skill-up run`，上传 HTML report 为 artifact（保留 14 天）
+- 无 API token 时自动 skip 并提示加 secret，不阻塞 PR
+
+**要在 fork / 自己机器复现 CI**：
+
+```bash
+# 1. 装 skill-up
+curl -fsSL https://raw.githubusercontent.com/alibaba/skill-up/main/install.sh | bash
+
+# 2. 跑 evals（需要 Claude Code 或兼容的 Anthropic API）
+skill-up run evals/eval.yaml
+
+# 3. 看 report
+open fe-argus-workspace/iteration-*/report.html
+```
+
+**配置 GitHub Action 跑 evals**：
+
+repo Settings → Secrets and variables → Actions，加：
+
+| Secret | 必需 | 说明 |
+|---|---|---|
+| `ANTHROPIC_AUTH_TOKEN` | ✅ | API token（直连 Anthropic 或代理） |
+| `ANTHROPIC_BASE_URL` | 代理时必需 | 如 `https://open.bigmodel.cn/api/anthropic` |
+| `ANTHROPIC_MODEL` | 代理时必需 | 如 `glm-5.2` |
 
 ## 跨 Agent 注入原理
 
