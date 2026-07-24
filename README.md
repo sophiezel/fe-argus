@@ -22,12 +22,19 @@ Argus 给所有 AI 编码 agent 装上同一套前端守门规则：写代码前
 
 ```bash
 # 方式 1：clone 后跑（推荐，可改规则）
-git clone <repo-url> ~/.agents/skills/fe-argus
+git clone https://github.com/sophiezel/fe-argus.git ~/.agents/skills/fe-argus
 bash ~/.agents/skills/fe-argus/install.sh
 
 # 方式 2：curl 一键（只读使用）
-curl -fsSL https://raw.githubusercontent.com/<owner>/fe-argus/main/install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/sophiezel/fe-argus/main/install.sh | bash
+
+# 方式 3：SSH 仓库地址（已配 SSH key 时）
+FE_ARGUS_REPO=git@github.com:sophiezel/fe-argus.git \
+  curl -fsSL https://raw.githubusercontent.com/sophiezel/fe-argus/main/install.sh | bash
 ```
+
+> **HTTPS vs SSH**：install.sh 内部 `git clone` 默认用 HTTPS（公开仓库免 token）；
+> 想用 SSH 时设 `FE_ARGUS_REPO=git@...` 环境变量覆盖。`curl | bash` 下载脚本本身必须用 HTTPS。
 
 安装脚本会：
 1. 检查 `bash / python3 / git` 依赖

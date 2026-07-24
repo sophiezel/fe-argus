@@ -5,13 +5,13 @@
 #   git clone <repo> && cd fe-argus && bash install.sh
 #
 # 用法 2（curl 一键安装到 ~/.agents/skills/fe-argus）:
-#   curl -fsSL https://raw.githubusercontent.com/<owner>/fe-argus/main/install.sh | bash
+#   curl -fsSL https://raw.githubusercontent.com/sophiezel/fe-argus/main/install.sh | bash
 #
 # 用法 3（卸载）:
 #   bash install.sh --uninstall
 #
 # 环境变量:
-#   FE_ARGUS_REPO    git 仓库地址（默认占位，使用 curl 模式前必须改）
+#   FE_ARGUS_REPO    git 仓库地址（默认 HTTPS，可覆盖为 SSH: git@github.com:sophiezel/fe-argus.git）
 #   FE_ARGUS_BRANCH  分支名（默认 main）
 #   FE_ARGUS_DIR     安装目录（默认 ~/.agents/skills/fe-argus）
 
@@ -19,7 +19,7 @@ set -euo pipefail
 
 # 默认配置（用户可覆盖）
 DEFAULT_INSTALL_DIR="$HOME/.agents/skills/fe-argus"
-REMOTE_REPO="${FE_ARGUS_REPO:-https://github.com/your-org/fe-argus.git}"
+REMOTE_REPO="${FE_ARGUS_REPO:-https://github.com/sophiezel/fe-argus.git}"
 BRANCH="${FE_ARGUS_BRANCH:-main}"
 
 # 颜色
@@ -83,7 +83,7 @@ install_core() {
     return
   fi
 
-  if [[ "$REMOTE_REPO" == *"your-org"* ]]; then
+  if [[ "$REMOTE_REPO" == *"your-org"* || "$REMOTE_REPO" == *"EXAMPLE"* ]]; then
     die "REMOTE_REPO is placeholder. Set FE_ARGUS_REPO env var or use local install."
   fi
 
