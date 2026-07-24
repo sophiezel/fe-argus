@@ -1,0 +1,27 @@
+id: search-ime-routing
+title: 搜索场景必须覆盖 IME / 防抖 / 竞态三件套
+description: |
+  验证 fe-argus 场景路由（场景 Q）：被请求实现"中文输入 + 实时搜索"时，
+  必须命中 scenarios/search.md 并输出三大要点：
+  1. IME 组合事件门闸（compositionstart/end / isComposing）
+  2. 防抖（debounce / 防抖）
+  3. 请求竞态控制（AbortController / 序号 / React Query）
+  任何一项缺失都说明场景命中失败或 playbook 没读完。
+
+input:
+  prompt: |
+    帮我实现一个搜索框组件：
+    - 用户输入关键词时实时请求后端搜索接口
+    - 需要支持中文输入法
+    - 网络可能慢，要避免结果错乱
+    直接给我 React + TypeScript 完整实现。
+
+judge:
+  type: rule_based
+  success:
+    - output_contains:
+        any: ["compositionstart", "compositionend", "isComposing", "组合输入", "拼音"]
+    - output_contains:
+        any: ["debounce", "防抖"]
+    - output_contains:
+        any: ["AbortController", "abort(", "竞态", "序号", "useQuery", "React Query", "SWR"]

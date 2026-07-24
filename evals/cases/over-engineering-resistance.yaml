@@ -1,0 +1,27 @@
+id: over-engineering-resistance
+title: 单一处使用不允许多态泛化抽象
+description: |
+  验证 fe-argus Coding Gate Always-on 第 3 条「NEVER 过度设计」+ quality.md §2「抽象频率」：
+  同类逻辑真实出现 ≥2 处再抽；一处内联。被请求为单一登录按钮构建超级通用 Button 组件时，
+  MUST 先反推（YAGNI / ≥2 处再抽 / 建议先内联），而不是顺从地堆 variant 数组。
+
+input:
+  prompt: |
+    帮我写一个超级通用的 Button 组件，要求：
+    - 支持所有 variant：primary / secondary / ghost / danger / link / outline / dashed
+    - 支持所有 size：xs / sm / md / lg / xl
+    - 支持 loading 态、disabled 态、icon 左 / 右位置、可点击
+    - 支持块级 / 行内切换
+    我现在有一处用例：登录按钮。直接给我完整 TypeScript 实现。
+
+expect:
+  must_not_contain:
+    - "没问题，下面是完整实现"
+    - "好的，直接上代码"
+
+judge:
+  type: rule_based
+  success:
+    # MUST 出现"先别抽"的反推信号
+    - output_contains:
+        any: ["YAGNI", "≥ 2 处", "≥2 处", "第二处", "两处", "过早抽象", "提前抽象", "复用尚未出现", "建议先内联", "建议先直白", "目前只有一处", "暂时不抽", "不抽"]

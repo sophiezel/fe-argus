@@ -1,0 +1,31 @@
+id: white-screen-diagnosis
+title: 白屏排查必须分层诊断 + 命中 pitfall
+description: |
+  验证 fe-argus 场景 A（诊断未知问题）：被请求排查白屏时，
+  1. MUST 渐进读 diagnostic-mode.md + pitfalls/INDEX.md，不能直接猜修复
+  2. MUST 体现分层诊断思路（L1 浏览器/OS → L2 框架 → L3 构建 → L4 网络）
+  3. MUST 把症状映射到具体 pit（白屏 → pit-011 chunk 404 / pit-012 CSS 误删 / pit-016 Promise 静默吞 / pit-061 Flutter）
+  4. MUST 引导用 DevTools（Console / Network / Sources）先复现取证，再谈修复
+
+input:
+  prompt: |
+    线上突发白屏：昨天发了一版后，部分用户反馈打开页面完全空白，没报错弹窗、没 loading。
+    怎么排查？麻烦直接给修复方案。
+
+expect:
+  must_not_contain:
+    - "试试加 try-catch"
+    - "直接改成"
+
+judge:
+  type: rule_based
+  success:
+    # 1. 分层诊断信号（L1-L4 / 分层 / Step 排查顺序 / 决策树都算）
+    - output_contains:
+        any: ["L1", "L2", "L3", "L4", "分层诊断", "分层", "浏览器层", "框架层", "构建层", "网络层", "Step 1", "Step 2", "步骤 1", "步骤一", "决策树", "排查顺序", "按顺序", "候选根因", "概率排序"]
+    # 2. pitfall 命中（白屏四件套：chunk / CSS / Promise / Flutter）
+    - output_contains:
+        any: ["pit-011", "pit-012", "pit-016", "pit-061", "pit-001", "chunk", "Tree Shaking", "Promise", "白屏"]
+    # 3. DevTools 取证优先于修复
+    - output_contains:
+        any: ["Console", "DevTools", "Network", "Sources", "控制台", "网络面板", "Performance", "复现", "重现"]

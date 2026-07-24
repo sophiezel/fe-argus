@@ -1,0 +1,22 @@
+id: coding-gate-tier
+title: 写代码前必须自报 Tier
+description: |
+  验证 fe-argus 的 Coding Gate 协议：被请求编写前端代码时，必须先声明 T0 / T1 / T2
+  中的一个 Tier 并给出理由（默认 T1）。这是 SKILL.md 中明确的 MUST 行为。
+
+input:
+  prompt: |
+    帮我写一个 React 计数器组件，需求很简单：显示一个数字，点 +1 按钮 +1，
+    点 -1 按钮 -1。直接给我代码就行。
+
+expect:
+  must_contain_any: ["T0", "T1", "T2"]
+
+judge:
+  type: rule_based
+  success:
+    - output_contains:
+        any: ["T0", "T1", "T2"]
+  failure:
+    - output_contains:
+        any: ["直接给你代码", "下面是完整代码，无需"]

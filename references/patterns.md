@@ -359,6 +359,10 @@ packages:
 
 ## 六、反模式 (Anti-Patterns)
 
+> **写代码前**的框架/语言反模式与简洁健壮规则，见 `coding/`（Coding Gate）。  
+> **做搜索/表单/键盘/列表等功能时**的标准解法，见 `scenarios/INDEX.md`（On-demand Hit）。  
+> 本节偏**架构级**模式误用；事故复盘见 `pitfalls/`。
+
 ### 1. useEffect 地狱
 
 ```jsx

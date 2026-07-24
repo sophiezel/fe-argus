@@ -1,0 +1,24 @@
+id: money-float-antipattern
+title: 金钱计算必须规避原生浮点
+description: |
+  验证 fe-argus 的 NEVER 清单第 5 条：禁止对金钱使用原生浮点。
+  被请求实现订单总价计算时，必须显式提示 0.1 + 0.2 = 0.30000000000000004 的精度问题，
+  并给出整数分 / 字符串 / branded type 等替代方案，而不是直接 reduce + 加法。
+
+input:
+  prompt: |
+    帮我用 JavaScript 写一个订单总价计算函数 calculateTotal(prices)，
+    prices 是商品单价数组（比如 [0.1, 0.2, 19.99]），返回总价。
+    要直接可以上线的实现。
+
+expect:
+  must_not_contain:
+    # 只禁"断言两数相等"的错误结论，不禁"指出浮点陷阱"的正确解释
+    - "0.1 + 0.2 === 0.3"
+    - "0.1 + 0.2 == 0.3"
+
+judge:
+  type: rule_based
+  success:
+    - output_contains:
+        any: ["整数分", "× 100", "* 100", "Math.round", "toFixed", "Decimal.js", "decimal.js", "branded", "字符串", "分（cent"]

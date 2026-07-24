@@ -45,6 +45,18 @@
 **依赖流向**：网络 → 构建 → 框架 → 浏览器运行时 → 用户感知
 **反向影响**：用户性能感知 驱动 构建优化 驱动 协议选择
 
+### 编码质量与场景 Playbook（写代码路径）
+
+```
+Coding Gate (SKILL.md)
+  ├─ Tier T0/T1/T2 ──→ references/coding/     (质量 / React / Vue / JS)
+  └─ On-demand Hit ──→ references/scenarios/  (L0 INDEX → L1 领域 → L2 环境)
+事故诊断另走 pitfalls/ ；架构选型走 patterns/ + decisions/
+```
+
+- 术语：根目录 `CONTEXT.md`
+- 场景路由表：`references/scenarios/INDEX.md`
+
 ---
 
 ## 二、浏览器渲染管线 (Browser Rendering Pipeline)

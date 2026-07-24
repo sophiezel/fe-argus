@@ -1490,5 +1490,5 @@ curl -sI http://localhost:3000 | grep -iE 'server|content-type|cache|etag|x-powe
 
 > **版本**: 1.0.0
 > **最后更新**: 2026-06-14
-> **维护者**: frontend-architect-expert skill
+> **维护者**: fe-argus skill
 > **关联文档**: pitfalls/INDEX.md / knowledge-map.md / patterns.md / checklist.md

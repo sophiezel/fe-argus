@@ -1,0 +1,10 @@
+# skill-up eval artifacts (kept outside repo by default, but guard against accidents)
+*-workspace/
+.*-workspace/
+
+# macOS
+.DS_Store
+
+# Editor
+.vscode/
+.idea/
