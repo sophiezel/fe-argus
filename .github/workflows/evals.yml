@@ -87,22 +87,23 @@ jobs:
         run: |
           # bash 的 `[ -f glob ]` 不展开，用 ls 找文件
           result_file=$(ls fe-argus-workspace/iteration-*/result.json 2>/dev/null | head -1)
-          if [ -n "$result_file" ]; then
-            python3 -c "
-            import json
-            d = json.load(open('$result_file'))
-            print('== Eval Summary ==')
-            for c in d.get('case_results', []):
-                mark = '✓' if c['status']=='PASS' else ('⚠' if c['status']=='ERROR' else '✗')
-                print(f\"  {mark} {c['case_id']:<32} {c['status']}\")
-            summary = d.get('case_results', [])
-            passed = sum(1 for c in summary if c['status']=='PASS')
-            print(f'\\nTotal: {passed}/{len(summary)} PASS')
-            "
-          else
+          if [ -z "$result_file" ]; then
             echo 'No result.json found'
             ls -la fe-argus-workspace/ 2>/dev/null || echo 'no workspace dir'
+            exit 0
           fi
+          # heredoc 必须顶格（不能在 if 块里缩进），否则 PYEOF 闭合识别失败
+          python3 - "$result_file" <<'PYEOF'
+          import json, sys
+          d = json.load(open(sys.argv[1]))
+          print('== Eval Summary ==')
+          for c in d.get('case_results', []):
+              mark = '✓' if c['status']=='PASS' else ('⚠' if c['status']=='ERROR' else '✗')
+              print(f"  {mark} {c['case_id']:<32} {c['status']}")
+          summary = d.get('case_results', [])
+          passed = sum(1 for c in summary if c['status']=='PASS')
+          print(f'\nTotal: {passed}/{len(summary)} PASS')
+          PYEOF
 
       - name: Upload eval report
         if: always() && env.HAS_TOKEN == 'true'
