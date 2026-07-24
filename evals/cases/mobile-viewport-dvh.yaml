@@ -1,0 +1,23 @@
+id: mobile-viewport-dvh
+title: 移动端全屏高度使用 dvh 而非 100vh
+description: |
+  验证 fe-argus 的 NEVER 清单第 3 条：禁止用 100vh 当全屏高度。
+  被请求实现移动端全屏 loading 页时，必须推荐 100dvh / 100svh / 100lvh 或动态视口方案，
+  不能默认推荐 100vh（iOS Safari 工具栏会导致内容被遮挡）。
+
+input:
+  prompt: |
+    实现一个移动端 H5 全屏 loading 页：
+    - 占满整个屏幕（包括 iOS Safari 工具栏伸缩时）
+    - 中间显示一个 spinner
+    - 直接给我 React + CSS 实现就行。
+
+expect:
+  must_contain_any: ["100dvh", "100svh", "100lvh", "动态视口", "dynamic viewport", "inset: 0", "inset:0", "position: fixed", "position:fixed"]
+
+judge:
+  type: rule_based
+  success:
+    # dvh 系列是首选；但 fixed + inset:0 完全绕开 vh 单位也是 NEVER #3 的合规解
+    - output_contains:
+        any: ["100dvh", "100svh", "100lvh", "动态视口", "dynamic viewport", "inset: 0", "inset:0", "position: fixed", "position:fixed"]
