@@ -40,10 +40,15 @@ H5 调原生：超时、取消、页面 unload 清理 pending map（按 requestI
 
 ---
 
-## L2 指针
+## 环境增量
 
-- [hybrid/webview-bridge.md](hybrid/webview-bridge.md)
-- [rn/webview.md](rn/webview.md)
+### Hybrid
+- 平台注入差异：**MUST** [hybrid/webview-bridge.md](hybrid/webview-bridge.md)
+
+### RN
+- `react-native-webview`：`onMessage` / `injectJavaScript` / `postMessage`
+- `originWhitelist`、HTTPS；禁随意 `allowFileAccess`
+- 键盘与滚动优先在 H5 侧按 Hybrid 键盘 playbook，避免原生与 H5 双重 scroll
 
 ## 相关
 

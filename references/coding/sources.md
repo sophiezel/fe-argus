@@ -1,6 +1,6 @@
 # Coding Canon — Sources & Distillation Queue
 
-> 维护用。默认 **不** 在 Coding Gate 加载本文件。
+> **场景 R** 加载。写业务代码默认路径 **不** 读本文件。
 
 ## 已吸收进种子正文的来源取向
 

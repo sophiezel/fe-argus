@@ -40,11 +40,20 @@ MIME/扩展名、大小上限、张数；失败即时提示，避免无效上行
 
 ---
 
-## L2 指针
+## 环境增量
 
-- [web/upload.md](web/upload.md)
-- [rn/upload.md](rn/upload.md)
-- [miniprogram/upload.md](miniprogram/upload.md)
+### Web
+- `<input type=file accept>` + drag-drop；校验 `DataTransfer`
+- 大文件按后端协议分片；进度用 XHR 或 ReadableStream
+- `ImageBitmap` 用完 `close()` 防内存涨
+
+### RN
+- 系统 picker / `launchImageLibrary`；先过权限状态机
+- `FormData` + fetch/axios；大图先压缩
+
+### 小程序
+- `chooseImage` / `chooseMedia` → `uploadFile`；听进度
+- 上传域名白名单；临时路径生命周期内用完
 
 ## 相关
 

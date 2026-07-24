@@ -23,7 +23,7 @@ document.body.style.top = '';
 window.scrollTo(0, y);
 ```
 
-iOS/WebView 更脆，见 L2 `hybrid/scroll-lock.md`。
+iOS/WebView 更脆，见 [hybrid/scroll-lock.md](hybrid/scroll-lock.md)。
 
 ### 2. 焦点管理
 
@@ -53,13 +53,20 @@ body.modal-open { overflow: hidden; }
 
 ---
 
-## L2 指针
+## 环境增量
 
-- [web/overlay.md](web/overlay.md)
-- [hybrid/scroll-lock.md](hybrid/scroll-lock.md)
-- [rn/overlay.md](rn/overlay.md)
+### Web
+- 优先 `<dialog showModal()>`（支持良好时）拿顶层与 Esc
+- `inert` 背景（支持时）；`scrollbar-gutter` 防锁滚抖布局
+
+### Hybrid
+- 滚动穿透：**MUST** [hybrid/scroll-lock.md](hybrid/scroll-lock.md)
+
+### RN
+- 用官方 `Modal` 或导航 present；处理 Android back
+- 假弹层勿漏挡触摸（`pointerEvents`）
+- Modal 内表单仍要 KeyboardAvoiding（见 [rn/form-keyboard.md](rn/form-keyboard.md)）
 
 ## 相关
 
 - [form-input.md](form-input.md)（弹层内表单）
-- a11y 基础：焦点与 Esc

@@ -1,6 +1,6 @@
 # Coding Canon — React
 
-> T1+ 且技术栈含 React 时必读。事故级细节见 `pitfalls/`（如 pit-001～005）。
+> T1+ 默认必读。事故级细节见 `pitfalls/`（如 pit-001～005）。加深见 [sources.md](sources.md)（场景 R）。
 
 ## 适用信号
 

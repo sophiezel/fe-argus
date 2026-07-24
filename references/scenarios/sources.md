@@ -1,6 +1,6 @@
 # Scenario Sources & Distillation Queue
 
-> 维护用。默认不随 On-demand Hit 加载。
+> **场景 R** 加载。On-demand Hit 写功能时 **不** 读本文件。
 
 ## 种子已覆盖的案例取向
 

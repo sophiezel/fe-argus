@@ -1,35 +1,44 @@
 # L2 RN — Form & Keyboard
 
-增量：React Native 表单与键盘。
+> Q 命中表单/键盘 + React Native 时加载。相对 [form-input.md](../form-input.md)。
 
-## 键盘遮挡
+## 适用信号
 
-1. 优先 `KeyboardAvoidingView`（`behavior`: iOS `padding`，Android 常 `height` 或依赖 `windowSoftInputMode`）
-2. 或 `KeyboardAwareScrollView`（社区）包住表单
-3. Android：`android:windowSoftInputMode="adjustResize"`（原生工程配置）与 RN 行为一致
-4. 聚焦 `TextInput` 时 `scrollToFocusedInput`；多输入长表单必须可滚
+TextInput 被软键盘挡住；点击提交无响应；长表单无法滚到焦点。
+
+---
+
+## 标准解法
+
+1. `KeyboardAvoidingView`：`behavior` iOS 常用 `padding`；Android 依赖 `windowSoftInputMode`（`adjustResize`）时 often 不设或 `height`
+2. 或社区 `KeyboardAwareScrollView` 包住表单
+3. 外层 `ScrollView` + `keyboardShouldPersistTaps="handled"`——否则先收键盘吃掉 onPress
+4. 多字段：聚焦时滚到输入（库或 `measure` + `scrollTo`）
+5. 安全区：`useSafeAreaInsets`，底栏勿被 Home Indicator 挡
 
 ```tsx
-// ✅ 典型
-<KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : undefined} style={{ flex: 1 }}>
+<KeyboardAvoidingView
+  behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+  style={{ flex: 1 }}
+  keyboardVerticalOffset={headerHeight}
+>
   <ScrollView keyboardShouldPersistTaps="handled">{/* fields */}</ScrollView>
 </KeyboardAvoidingView>
 ```
 
-## 其它坏 case
+## IME / 搜索
 
-- `keyboardShouldPersistTaps="handled"`：点按钮时不先收键盘导致 onPress 丢失
-- 安全区：`SafeAreaView` / `useSafeAreaInsets`，底栏勿被 Home Indicator 挡
-- 中文 IME：RN TextInput 无 DOM composition 事件——用受控值；避免每个 `onChangeText` 立即导航/搜索时打拼音中间态（可对搜索做短 debounce + 不在 composing 语义下可用结束编辑再搜）
+RN TextInput **无** DOM `composition*`。即时搜索：短 debounce；避免每个拼音字母打接口；可「结束编辑 / 点搜索」再请求。
 
 ## 反模式
 
 ```tsx
-// ❌ 无 Avoiding，底部提交按钮被键盘永远挡住
-// ❌ 外层 ScrollView 与内层冲突抢手势
+// ❌ 无 Avoiding，底按钮永远在键盘下
+// ❌ 嵌套 ScrollView 抢手势
+// ❌ keyboardShouldPersistTaps 默认，按钮要点两次
 ```
 
 ## 相关
 
 - [../form-input.md](../form-input.md) · [../search.md](../search.md)
-- pit-014 / pit-058（RN 性能与桥，列表场景叠加）
+- pit-014 / pit-058（列表性能叠加 [list.md](list.md)）

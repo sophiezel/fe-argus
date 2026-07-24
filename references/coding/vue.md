@@ -1,6 +1,6 @@
 # Coding Canon — Vue
 
-> T1+ 且技术栈含 Vue 时必读。事故级细节见 pit-030～034。
+> T1+ 且技术栈含 Vue 时必读。事故级细节见 pit-030～034。加深见 [sources.md](sources.md)（场景 R）。
 
 ## 适用信号
 

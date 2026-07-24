@@ -35,11 +35,19 @@
 
 ---
 
-## L2 指针
+## 环境增量
 
-- [rn/permission.md](rn/permission.md)
-- [miniprogram/permission.md](miniprogram/permission.md)
-- [hybrid/permission.md](hybrid/permission.md)
+### Hybrid
+- 权限多在原生申请；H5 经 bridge 调起，勿假设 `getUserMedia` 可用
+- 被拒后「去设置」走原生打开设置页 API
+
+### RN
+- `react-native-permissions`（或 Expo）统一 API
+- iOS Info.plist / Android manifest 声明缺一不可（商店拒）
+
+### 小程序
+- 平台 `authorize` + 隐私协议弹窗（近年强制）
+- 拒绝后 `openSetting`；跟厂商审核文案
 
 ## 相关
 

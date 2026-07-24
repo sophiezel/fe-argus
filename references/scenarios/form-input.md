@@ -2,7 +2,7 @@
 
 ## 适用信号
 
-登录注册、多字段表单、受控输入、校验时机、提交、IME、键盘相关（环境细节见 L2）。
+登录注册、多字段表单、受控输入、校验时机、提交、IME、键盘遮挡（Hybrid/RN 见专用 L2）。
 
 ---
 
@@ -60,12 +60,23 @@ async function onSubmit() {
 
 ---
 
-## L2 指针
+## 环境增量
 
-- [web/form.md](web/form.md)
-- [hybrid/form-keyboard.md](hybrid/form-keyboard.md) — 键盘遮挡、WebView
-- [rn/form-keyboard.md](rn/form-keyboard.md) — KeyboardAvoidingView 等
-- [miniprogram/form.md](miniprogram/form.md)
+### Web
+- 原生约束先用 `required` / `pattern` / `min|max`；复杂规则再 JS
+- 保持可识别 `autocomplete`（密码管理器）
+- 单行 Enter 会提交整表，多字段注意拦截
+
+### Hybrid
+- 键盘遮挡 / visualViewport：**MUST** [hybrid/form-keyboard.md](hybrid/form-keyboard.md)
+
+### RN
+- KeyboardAvoiding：**MUST** [rn/form-keyboard.md](rn/form-keyboard.md)
+
+### 小程序
+- `bindinput` / `bindblur`；搜索 `confirm-type`
+- 键盘：`adjust-position`、`hold-keyboard`；真机验遮挡
+- `button form-type` 提交；loading 防连点
 
 ## 相关
 

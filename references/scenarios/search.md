@@ -96,13 +96,19 @@ onChange={debounce((v) => fetch(v).then(setList), 300)}
 
 ---
 
-## L2 指针
+## 环境增量
 
-- Web 细节：[web/search.md](web/search.md)
-- 输入在 Hybrid/RN 容器：叠加 [hybrid/form-keyboard.md](hybrid/form-keyboard.md) / [rn/form-keyboard.md](rn/form-keyboard.md)
+### Web
+- 桌面：`input[type=search]`；快捷键 `/` 聚焦时勿与浏览器查找冲突
+- Safari：`composition` 顺序与 Chrome 略异，以 `compositionend` 为准再搜
+- History：仅在提交或 debounce 稳定后 `replaceState` 写 q，避免污染历史
+
+### Hybrid / RN（键盘与输入容器）
+- 叠加 [hybrid/form-keyboard.md](hybrid/form-keyboard.md) / [rn/form-keyboard.md](rn/form-keyboard.md)
+- RN 无 DOM composition：搜索勿每个 `onChangeText` 立即请求，debounce + 结束编辑再搜
 
 ## 相关
 
 - `../coding/react.md` §请求竞态 · `../coding/js-core.md` §竞态
-- pit-005（批处理/竞态相关验证）
+- pit-005（竞态验证）
 - `../ai-frontend-patterns.md` IME Composer 示例

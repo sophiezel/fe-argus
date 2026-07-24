@@ -42,11 +42,20 @@
 
 ---
 
-## L2 指针
+## 环境增量
 
-- [web/list.md](web/list.md)
-- [rn/list.md](rn/list.md) — FlatList 配置坑
-- [miniprogram/list.md](miniprogram/list.md)
+### Web
+- `IntersectionObserver` 无限滚动，根 margin 预加载
+- 虚拟列表（如 TanStack Virtual）；SSR 仅客户端挂载
+- `content-visibility: auto` 可轻量优化，不替代虚拟列表
+
+### RN
+- FlatList 调参：**MUST** [rn/list.md](rn/list.md)
+
+### 小程序
+- `scroll-view` / 平台 list；注意与页面滚动冲突
+- 分页 cursor；`onPullDownRefresh` 勿与自定义刷新重复绑定
+- **setData 只更差分**（见 `../miniprogram-architecture.md`）
 
 ## 相关
 
