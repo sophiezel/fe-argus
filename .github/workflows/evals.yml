@@ -39,13 +39,18 @@ jobs:
         with:
           node-version: '20'
 
+      - name: Install Claude Code CLI
+        run: npm install -g @anthropic-ai/claude-code
+
       - name: Install skill-up
         run: |
           curl -fsSL https://raw.githubusercontent.com/alibaba/skill-up/main/install.sh | bash
           echo "$HOME/.local/bin" >> $GITHUB_PATH
 
-      - name: Show skill-up version
-        run: skill-up --version
+      - name: Show tool versions
+        run: |
+          skill-up --version
+          claude --version || echo "claude not found"
 
       - name: Validate eval.yaml
         run: skill-up validate evals/eval.yaml
@@ -62,6 +67,38 @@ jobs:
           ANTHROPIC_DEFAULT_OPUS_MODEL: ${{ secrets.ANTHROPIC_MODEL }}
           ANTHROPIC_DEFAULT_HAIKU_MODEL: ${{ secrets.ANTHROPIC_MODEL }}
         run: skill-up run evals/eval.yaml
+        continue-on-error: true  # evals 有 case FAIL 会 exit 1，但不阻塞 artifact 上传
+
+      - name: Move workspace into cwd (for artifact upload)
+        if: always() && env.HAS_TOKEN == 'true'
+        run: |
+          # skill-up 把 workspace 放在 ../<skill-name>-workspace/
+          if [ -d ../fe-argus-workspace ]; then
+            mv ../fe-argus-workspace ./fe-argus-workspace
+            echo "Moved workspace into cwd"
+          else
+            echo "No workspace found at ../fe-argus-workspace"
+            ls -la ..
+          fi
+
+      - name: Capture eval summary
+        if: always() && env.HAS_TOKEN == 'true'
+        run: |
+          # 打印 PASS/FAIL 摘要到 GitHub Actions UI
+          if [ -f fe-argus-workspace/iteration-*/result.json ]; then
+            python3 -c "
+            import json, glob
+            for f in glob.glob('fe-argus-workspace/iteration-*/result.json'):
+                d = json.load(open(f))
+                print(f'== {f} ==')
+                for c in d.get('case_results', []):
+                    mark = '✓' if c['status']=='PASS' else '✗'
+                    print(f\"  {mark} {c['case_id']:<30} {c['status']}\")
+                summary = d.get('case_results', [])
+                passed = sum(1 for c in summary if c['status']=='PASS')
+                print(f'\\nTotal: {passed}/{len(summary)} PASS')
+            "
+          fi
 
       - name: Upload eval report
         if: always() && env.HAS_TOKEN == 'true'
