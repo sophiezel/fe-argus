@@ -32,7 +32,7 @@ jobs:
       # 把 secret 存在性转成 env，避免 if 里直接判 secrets（GitHub 限制）
       HAS_TOKEN: ${{ secrets.ANTHROPIC_AUTH_TOKEN != '' }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - name: Setup Node
         uses: actions/setup-node@v4
