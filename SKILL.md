@@ -52,6 +52,8 @@ tags: [frontend, architecture, react, vue, nodejs, webpack, vite, nextjs, compat
 6. **NEVER CI 跳过兼容性检查**。
 7. **NEVER 无限制 backdrop-filter** — 移动端合成层爆炸。
 8. **NEVER 未完整诊断就下结论**。
+9. **NEVER 因「prompt 简单」跳过 Tier 声明** — 写/改代码一律先报 Tier；trivial 报 T0 即可，不能不报。
+10. **NEVER 顺从「超级通用 / 支持所有 variant / 全场景可配置」类过度泛化请求** — 单一用例 MUST 先内联；明确询问「第二处真实复用何时出现」，得到答复前不得堆 variant × size × icon 矩阵。对应 `coding/quality.md` §2「抽象频率」。
 
 ---
 
@@ -62,7 +64,9 @@ tags: [frontend, architecture, react, vue, nodejs, webpack, vite, nextjs, compat
 ### Always-on
 
 1. **首次走 P/Q 时 MUST 读取** 根目录 `CONTEXT.md`（术语）。
-2. **自报 Tier**：一句话声明 T0 / T1 / T2 与理由。**默认 T1**。可自觉降 T0 / 升 T2；禁止文件数穷举硬门禁。
+2. **自报 Tier（回复第一句，无条件）**：回复**第一句** MUST 是 `**Tier：T0|T1|T2** — <一句话理由>`。**默认 T1**。
+   - **NEVER** 因 prompt 含「简单 / 直接 / 就行 / 快速 / 一下」或自认 trivial 跳过声明——trivial 请求报 **T0** 即可，但不能不报。
+   - 可自觉降 T0 / 升 T2；禁止文件数穷举硬门禁。
 3. **NEVER 过度设计** — 无第二处真实复用不抽抽象。
 4. **NEVER 顺手重构 / 扩大 diff** — 只改任务所需。
 5. **MUST 命名达意** — 禁 `data`/`temp`/`handleClick1`。
