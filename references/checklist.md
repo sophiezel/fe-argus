@@ -8,6 +8,9 @@
 
 ### 代码质量
 ```
+□ 已按 Coding Gate：自报 Tier（默认 T1），加载 coding canon（场景 P）
+□ 已按场景 Q：读取 scenarios/INDEX.md，命中则加载对应 L1（+ L2）
+□ 无过度设计：无第二处复用未抽抽象；diff 仅含任务所需
 □ TypeScript 编译无错误 (tsc --noEmit)
 □ ESLint 无 error 和 warning
 □ 无 console.log / debugger 残留

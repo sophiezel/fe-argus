@@ -1,7 +1,7 @@
 ---
 name: frontend-architect-expert
-description: 蒸馏顶级前端架构专家 — 精通 React/Vue/原生JS/Node.js/Next.js/Webpack/Vite 全链路，擅长多终端兼容、复杂交互、工程化架构设计、AI前端应用落地。Use when 前端架构设计、性能优化、复杂组件设计、多终端兼容、构建工具链、微前端、SSR/SSG、前端AI集成。
-tags: [frontend, architecture, react, vue, nodejs, webpack, vite, nextjs, compatibility, ai-integration]
+description: 蒸馏顶级前端架构专家 — 精通 React/Vue/原生JS/Node.js/Next.js/Webpack/Vite 全链路，擅长高质量编码（简洁/健壮/反过度设计）、框架反模式规避、具体交互场景 playbook、多终端兼容、工程化架构、AI前端落地。Use when 写/改前端代码、前端架构设计、性能优化、搜索/表单/Hybrid/RN 等场景实现、多终端兼容、构建工具链、微前端、SSR/SSG、前端AI集成。
+tags: [frontend, architecture, react, vue, nodejs, webpack, vite, nextjs, compatibility, ai-integration, code-quality, scenarios]
 ---
 
 # 前端架构专家 (Frontend Architect Expert)
@@ -55,6 +55,21 @@ tags: [frontend, architecture, react, vue, nodejs, webpack, vite, nextjs, compat
          └────────── 未解决：扩大搜索半径到架构层面 ────────────┘
 ```
 
+### 快速排查模式 (Express Debug Mode)
+
+当需要快速迭代排查（候选方案→验证→回退→换下一个）而非完整四层诊断时，使用以下循环：
+
+```
+症状匹配 → 候选排序(按环境匹配度) → 诊断验证 → 确认?
+  ├─ 是 → 应用修复 → 验证通过? → 是 → 完成
+  │                           └─ 否 → rollback → 下一候选
+  └─ 否 → rollback → 下一候选
+               ↓ (所有候选耗尽)
+          回到主循环完整诊断
+```
+
+此模式适用于已知症状匹配明确的场景。不匹配或快速模式失败后，必须回到主循环的五步完整诊断。
+
 ---
 
 ## NEVER 清单 (Anti-Patterns)
@@ -69,6 +84,42 @@ tags: [frontend, architecture, react, vue, nodejs, webpack, vite, nextjs, compat
 6. **NEVER 在 CI 环境中跳过兼容性检查** — 多终端 Bug 上线后暴露的修复成本是开发阶段的 10x。
 7. **NEVER 无限制使用 backdrop-filter** — 每个 backdrop-filter 创建独立 GPU 合成层，3 个以上移动端帧率崩塌。
 8. **NEVER 在未跑完整诊断流程前下结论** — "我在某个项目遇到过" 不等于 "当前问题根因相同"。环境、版本、数据流都可能不同。
+
+---
+
+## Coding Gate (写代码前强制)
+
+凡将**写入或修改前端代码**，必须先走本门（与场景 A–O **正交叠加**）。术语见根目录 `CONTEXT.md`。
+
+### Always-on（每次启用本 skill 即生效）
+
+1. **自报 Tier**：写代码前用一句话声明 T0 / T1 / T2 与理由。**默认 T1**。明显外科手术可降 T0；跨模块/选型/重构再升 T2。禁止用文件数/行数穷举硬门禁。
+2. **NEVER 过度设计** — 无第二处真实复用前不抽公共抽象；不为假想扩展加配置层。
+3. **NEVER 顺手重构** — 修复/小功能与重构分事务。
+4. **NEVER 扩大 diff** — 只改任务所需；对齐项目既有风格。
+5. **MUST 命名达意** — 变量/函数/组件名表达业务意图，禁止模糊名（`data`/`temp`/`handleClick1`）。
+6. **NEVER 臆造 API / 类型 / 目录约定** — 以仓库现有代码为准。
+7. **不确定则降档不升档** — 拿不准时保持更小改动面。
+
+### Tier → coding canon 加载
+
+| Tier | MUST 读取 |
+|------|-----------|
+| T0 | 仅 Always-on；若症状匹配再读对应 `pit-XXX` |
+| T1（默认） | `references/coding/quality.md` + 当前栈 `react.md` 或 `vue.md` |
+| T2 | T1 全部 + `references/coding/js-core.md`；按需再加 `patterns.md` / `decisions.md` |
+
+### 场景命中 → Scenario Playbook（与 Tier 正交）
+
+1. **MUST** 读取 `references/scenarios/INDEX.md`
+2. 用任务中的功能/平台/症状信号做 **On-demand Hit**（1～N 条）
+3. 加载命中的 **L1**；已知环境时再加载对应 **L2**（`web/` / `hybrid/` / `rn/` / `miniprogram/`）
+4. **NEVER** 整目录通读 `references/scenarios/`
+5. 即使 T0：只要命中搜索/表单/键盘等信号，仍加载对应 playbook 薄片
+
+### Soft Composition
+
+本 skill 保持通用。其它流程（如 guazi-flow / implement / 直接开写）**若启用本 skill**，应遵守同一 Coding Gate；本仓库**不**硬改那些 skill。
 
 ---
 
@@ -93,6 +144,21 @@ tags: [frontend, architecture, react, vue, nodejs, webpack, vite, nextjs, compat
 ## 场景路由 (Scenario Router)
 
 根据任务类型，按以下规则强制加载对应参考文档。**未按规则读取对应文档不得开始编码。**
+
+写/改代码时：**先 Coding Gate（场景 P + 场景 Q）**，再按需叠加下列 A–O。
+
+### 场景 P: 实现/编码 (Coding Canon)
+
+1. 遵守上方 **Coding Gate / Always-on**，自报 Tier（默认 T1）
+2. **MUST** 按 Tier 表加载 `references/coding/` 对应文件
+3. 与场景 A–O、场景 Q 正交：可叠加，不互相替代
+
+### 场景 Q: 功能场景命中 (Scenario Playbooks)
+
+1. **MUST** 读取 `references/scenarios/INDEX.md` 做 On-demand Hit
+2. **MUST** 加载命中的 L1（+ 当前环境 L2）
+3. 与 Tier 正交：T0 也可因命中而加载 playbook
+4. **Do NOT** 未命中时仍通读 scenarios
 
 ### 场景 A: 诊断未知问题 (Bug / 性能回归 / 白屏 / 样式异常)
 1. **MUST** 先读取 `references/diagnostic-mode.md` 完整内容，按四层流程逐层排查
@@ -203,6 +269,19 @@ tags: [frontend, architecture, react, vue, nodejs, webpack, vite, nextjs, compat
 - **#architecture**: pit-041 ~ pit-045
 - **#observability**: pit-046 ~ pit-050
 
+### 按功能场景查找 (Scenario Playbooks)
+
+写功能前走场景 Q → `references/scenarios/INDEX.md`。常用入口：
+
+| 场景 | L1 |
+|------|-----|
+| 搜索 / IME / 竞态 / 防抖 | `scenarios/search.md` |
+| 表单 / 提交幂等 | `scenarios/form-input.md` |
+| 键盘遮挡 (Hybrid/RN) | `scenarios/hybrid/form-keyboard.md` · `scenarios/rn/form-keyboard.md` |
+| 滚动穿透 / 弹层 | `scenarios/overlay.md` |
+| 列表 / 虚拟列表 | `scenarios/list-scroll.md` |
+| WebView 桥 | `scenarios/webview-bridge.md` |
+
 ---
 
 ## 未匹配症状的回退路径 (Fallback)
@@ -223,6 +302,15 @@ tags: [frontend, architecture, react, vue, nodejs, webpack, vite, nextjs, compat
 
 | 文档 | 用途 | 触发场景 |
 |------|------|---------|
+| `CONTEXT.md` | 领域术语 (Coding Gate / Tier / Playbook) | P, Q |
+| `references/coding/quality.md` | 简洁/健壮/YAGNI/命名/抽象 | P (T1+) |
+| `references/coding/react.md` | React 编码反模式与性能/内存坑 | P (T1+ React) |
+| `references/coding/vue.md` | Vue 编码反模式与性能/内存坑 | P (T1+ Vue) |
+| `references/coding/js-core.md` | JS 可执行规则蒸馏 | P (T2 / 语言陷阱) |
+| `references/coding/sources.md` | coding 蒸馏出处与加深队列 | 维护 |
+| `references/scenarios/INDEX.md` | 场景 L0 路由 (On-demand Hit) | Q |
+| `references/scenarios/*.md` | L1 领域 playbook | Q (命中) |
+| `references/scenarios/{web,hybrid,rn,miniprogram}/` | L2 环境增量 | Q (命中+已知环境) |
 | `references/pitfalls/INDEX.md` | 双向索引(症状+标签) | A, C, D, F |
 | `references/knowledge-map.md` | 前端全链路知识域地图 | 回退 |
 | `references/diagnostic-mode.md` | 分层诊断流程 | A, C, 回退 |
