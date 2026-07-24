@@ -83,21 +83,25 @@ jobs:
 
       - name: Capture eval summary
         if: always() && env.HAS_TOKEN == 'true'
+        continue-on-error: true
         run: |
-          # 打印 PASS/FAIL 摘要到 GitHub Actions UI
-          if [ -f fe-argus-workspace/iteration-*/result.json ]; then
+          # bash 的 `[ -f glob ]` 不展开，用 ls 找文件
+          result_file=$(ls fe-argus-workspace/iteration-*/result.json 2>/dev/null | head -1)
+          if [ -n "$result_file" ]; then
             python3 -c "
-            import json, glob
-            for f in glob.glob('fe-argus-workspace/iteration-*/result.json'):
-                d = json.load(open(f))
-                print(f'== {f} ==')
-                for c in d.get('case_results', []):
-                    mark = '✓' if c['status']=='PASS' else '✗'
-                    print(f\"  {mark} {c['case_id']:<30} {c['status']}\")
-                summary = d.get('case_results', [])
-                passed = sum(1 for c in summary if c['status']=='PASS')
-                print(f'\\nTotal: {passed}/{len(summary)} PASS')
+            import json
+            d = json.load(open('$result_file'))
+            print('== Eval Summary ==')
+            for c in d.get('case_results', []):
+                mark = '✓' if c['status']=='PASS' else ('⚠' if c['status']=='ERROR' else '✗')
+                print(f\"  {mark} {c['case_id']:<32} {c['status']}\")
+            summary = d.get('case_results', [])
+            passed = sum(1 for c in summary if c['status']=='PASS')
+            print(f'\\nTotal: {passed}/{len(summary)} PASS')
             "
+          else
+            echo 'No result.json found'
+            ls -la fe-argus-workspace/ 2>/dev/null || echo 'no workspace dir'
           fi
 
       - name: Upload eval report
