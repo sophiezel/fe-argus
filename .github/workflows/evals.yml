@@ -27,7 +27,7 @@ concurrency:
 jobs:
   skill-up:
     runs-on: ubuntu-latest
-    timeout-minutes: 25
+    timeout-minutes: 30
     env:
       # 把 secret 存在性转成 env，避免 if 里直接判 secrets（GitHub 限制）
       HAS_TOKEN: ${{ secrets.ANTHROPIC_AUTH_TOKEN != '' }}

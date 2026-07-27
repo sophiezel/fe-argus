@@ -19,6 +19,11 @@ input:
     - 统一错误码：401 跳登录、500 toast、429 提示过快
     直接给我 TypeScript 完整实现。
 
+# CI 上 GLM 模型生成完整 http.ts 比较慢，需要更长 timeout
+constraints:
+  timeout_seconds: 600
+  max_turns: 10
+
 judge:
   type: rule_based
   success:
