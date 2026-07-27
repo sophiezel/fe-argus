@@ -264,6 +264,7 @@ tags: [frontend, architecture, react, vue, nodejs, webpack, vite, nextjs, compat
 | 滚动穿透 | `scenarios/overlay.md` + `hybrid/scroll-lock.md` |
 | 列表 | `scenarios/list-scroll.md` |
 | WebView 桥 | `scenarios/webview-bridge.md` |
+| **Taro 项目**（条件编译 / 网络 / 路由） | `scenarios/taro/INDEX.md` |
 
 ---
 
@@ -294,6 +295,10 @@ tags: [frontend, architecture, react, vue, nodejs, webpack, vite, nextjs, compat
 | `references/scenarios/hybrid/webview-bridge.md` | Q + Hybrid 桥 |
 | `references/scenarios/rn/form-keyboard.md` | Q + RN 键盘 |
 | `references/scenarios/rn/list.md` | Q + RN 列表 |
+| `references/scenarios/taro/INDEX.md` | Q + Taro 项目（条件编译/网络/路由） |
+| `references/scenarios/taro/multi-platform.md` | Q + Taro 多端条件编译 |
+| `references/scenarios/taro/network.md` | Q + Taro.request 拦截 / token 刷新 |
+| `references/scenarios/taro/route.md` | Q + Taro 页面栈 / TabBar |
 | `references/scenarios/sources.md` | R |
 | `references/pitfalls/INDEX.md` + `pit-*.md` | A, C, D, F, … |
 | `references/knowledge-map.md` | Fallback |

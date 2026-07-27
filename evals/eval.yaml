@@ -18,6 +18,7 @@ cases:
     - evals/cases/search-ime-routing.yaml
     - evals/cases/white-screen-diagnosis.yaml
     - evals/cases/over-engineering-resistance.yaml
+    - evals/cases/taro-network-routing.yaml
   defaults:
     timeout_seconds: 300
     max_turns: 8

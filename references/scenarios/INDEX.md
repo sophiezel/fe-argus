@@ -35,6 +35,7 @@
 | Hybrid / WebView | L1 + 上表 Hybrid L2（若有） |
 | React Native | L1 + 上表 RN L2（若有） |
 | 小程序 | 读 L1「环境增量 → 小程序」 |
+| **Taro 项目**（`@tarojs/*` in deps） | 读 [taro/INDEX.md](taro/INDEX.md) → 命中 Taro 专属 playbook |
 
 ## 相关
 

@@ -56,6 +56,7 @@
 | **G 可观测性** | Sentry / RUM / 埋点 | `references/frontend-observability.md`（渐进） |
 | **H 小程序** | 微信/支付宝小程序 | `references/miniprogram-architecture.md` |
 | **I 跨端选型** | RN / Taro / uni-app / Flutter Web | `references/cross-platform-architecture.md` |
+| **Taro 项目内**（`@tarojs/*`） | 条件编译 / 多端文件 / `Taro.request` 拦截 / 页面栈 | `references/scenarios/taro/INDEX.md` |
 | **J TypeScript** | 类型工程化 / 严格化 | `references/typescript-engineering.md` |
 | **K 安全审计** | XSS / CSP / 供应链 | `references/frontend-security.md` |
 | **L PWA** | Service Worker / 离线 | `references/pwa-offline-architecture.md` |

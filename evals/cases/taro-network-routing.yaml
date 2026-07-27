@@ -1,0 +1,33 @@
+id: taro-network-routing
+title: Taro 网络层必须覆盖拦截器 / token 单飞 / loading 计数
+description: |
+  验证 fe-argus 场景 Q 在 Taro 项目信号下的路由命中：
+  prompt 提到 Taro + 网络封装 + token 刷新 + 多请求 loading，
+  MUST 加载 scenarios/taro/INDEX.md → 命中 scenarios/taro/network.md，
+  输出三大要点：
+  1. 拦截器链（请求/响应双向）
+  2. token 单飞刷新（并发 401 共享一个 refreshPromise）
+  3. loading 计数（多请求共享，避免狂闪）
+  任何一项缺失说明场景路由未命中或 playbook 没读完。
+
+input:
+  prompt: |
+    Taro 项目（同时编译微信小程序和 H5 两端）。需要写一个生产级网络请求封装：
+    - 所有请求走统一入口，便于后续加拦截逻辑
+    - token 过期（401）时自动刷新一次；并发多个 401 共享同一个刷新请求
+    - 多个并发请求只显示一个 loading（不要每个请求各自 showLoading）
+    - 统一错误码：401 跳登录、500 toast、429 提示过快
+    直接给我 TypeScript 完整实现。
+
+judge:
+  type: rule_based
+  success:
+    # 1. 网络层核心概念（拦截器 / Taro.request 抽象）
+    - output_contains:
+        any: ["interceptor", "拦截器", "Taro.request", "请求拦截", "响应拦截"]
+    # 2. token 单飞（并发刷新只触发一次）
+    - output_contains:
+        any: ["单飞", "refreshPromise", "refreshing", "refreshToken", "锁", "inflight", "single", "debounce"]
+    # 3. loading 计数（多请求共享）
+    - output_contains:
+        any: ["loadingCount", "loading 计数", "引用计数", "showLoading", "hideLoading", "计数器"]
